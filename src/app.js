@@ -22,7 +22,7 @@ class App extends Component {
             ajax().get(`https://api.github.com/users/${value}`)
                 .then((result) => {
                     this.setState({
-                        userinfo:{
+                        userinfo: {
                             username: result.name,
                             photo: result.avatar_url,
                             github: result.login,
@@ -35,6 +35,15 @@ class App extends Component {
         }
     }
 
+    getRepos(e) {
+        ajax().get(`https://api.github.com/users/${value}/repos`)
+            .then((result) => {
+                this.setState({
+                    repos: [result.name, result.html_url]
+                })
+            })
+    }
+
     render() {
         return (
             <AppContent
@@ -42,6 +51,8 @@ class App extends Component {
                 repos={this.state.repos}
                 starred={this.state.starred}
                 handleSearch={(e) => this.handleSearch(e)}
+                getRepos={(e) => this.getRepos(e)}
+                getStarred={() => console.log('get starred')}
             />
         )
     }
