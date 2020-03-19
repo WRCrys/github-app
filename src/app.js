@@ -35,13 +35,18 @@ class App extends Component {
         }
     }
 
-    getRepos(e) {
-        ajax().get(`https://api.github.com/users/${value}/repos`)
-            .then((result) => {
-                this.setState({
-                    repos: [result.name, result.html_url]
+    getRepos(type) {
+        return (e) => {
+            ajax().get(`https://api.github.com/users/wrcrys/${type}`)
+                .then((result) => {
+                    this.setState({
+                        [type]: result.map((repo) => ({
+                            name: repo.name,
+                            link: repo.html_url
+                        }))
+                    })
                 })
-            })
+        }
     }
 
     render() {
@@ -51,8 +56,8 @@ class App extends Component {
                 repos={this.state.repos}
                 starred={this.state.starred}
                 handleSearch={(e) => this.handleSearch(e)}
-                getRepos={(e) => this.getRepos(e)}
-                getStarred={() => console.log('get starred')}
+                getRepos={this.getRepos('repos')}
+                getStarred={this.getRepos('starred')}
             />
         )
     }
